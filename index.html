@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="shortcut icon" href="./assets/Weather Favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./style.css">
+
+</head>
+
+<body class="overflow-x-hidden">
+    <section id="container"
+        class="py-5 relative font-weather text-[#dbe2ef] bg-gradient-to-tr from-[#112d4e] to-[#3f72af] w-[100vw] min-h-[100vh] min-w-[140px] h-full">
+
+        <div id="loading"
+            class="scale-0 overflow-y-hidden fixed top-0 w-[100vw] min-h-[100vh] h-full backdrop-blur-sm flex flex-col items-center justify-center transition-all duration-200 z-30">
+            <div class="relative">
+                <img src="./assets/loading Compressed.gif" alt="Loading Animation" width="200px">
+
+                <p class="absolute bottom-0 left-1/2 translate-x-[-45%] text-xl font-bold">LOADING..</p>
+            </div>
+        </div>
+
+        <div id="permission"
+            class=" w-full gap-4 flex flex-col items-center justify-evenly scale-100 absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] transition-all duration-200 z-10">
+            <img src="./assets/location.png" alt="Location.png" width="80px">
+            <p id="heading" class="md:text-[1.8rem] text-2xl font-extrabold">Grant Location Access</p>
+            <p class="text-[0.85rem] tracking-wide">Allow Access To Get Your City Weather</p>
+            <button onclick="getYourLocation()"
+                class="bg-[#3f72af] rounded-[4px] py-[10px] px-[30px] text-[#cfd2d7] hover:text-white hover:shadow-sm hover:bg-[#3b6ba6] transition-all duration-200">GRANT
+                ACCESS</button>
+        </div>
+
+        <div id="error"
+            class="absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] scale-0 transition-all duration-300 flex flex-col items-center z-10">
+            <img src="./assets/not-found.png" alt="Error 404" width="200px">
+            <p id="errormsg">City Not Found</p>
+        </div>
+
+        <div id="wrapper" class="overflow-x-hidden w-[90%] max-w-[550px] mx-auto relative flex flex-col items-center">
+            <div id="heading">
+                <p class="text-3xl font-bold">LIVE WEATHER</p>
+            </div>
+
+
+            <div id="options" class="flex justify-between w-[90%] mt-8">
+                <input id="yourcity" value="Your Weather" type="button"
+                    class="ml-2 bg-transparent hover:bg-[#dbe2ef80] rounded-[4px] px-[12px] py-[3px] md:tracking-wide cursor-pointer transition-all duration-[400ms]">
+
+                <div id="search"
+                    class=" min-w-[120px] w-[20%] hover:min-w-[140px] relative bg-transparent hover:bg-[#dbe2ef80] rounded-[4px] pl-[10px] pr-[10px] hover:pr-[25px] py-[3px] transition-all duration-[400ms] group">
+
+                    <input id="searchbar" type="text" placeholder="Search City" autocomplete="off"
+                        class="rounded-sm relative w-full px-1 bg-transparent placeholder-[rgb(219,226,239)] md:tracking-wide appearance-none underline-none focus:outline-none focus:bg-transparent transition-all duration-100">
+
+                    <img class="mix-blend-multiply absolute top-[2px] right-[2px] scale-0 group-hover:scale-100 transition-all duration-[400ms]"
+                        onclick="getSearchCity()" id="searchbtn" src="./assets/Blue Search.jpg" alt="Search"
+                        width="25px">
+                </div>
+
+            </div>
+
+
+            <div id="cityweather" class="scale-0 transition-all duration-300 flex flex-col items-center w-full mt-7">
+
+                <div id="city" class="flex items-center justify-evenly gap-2 ">
+                    <p id="cityname" class="text-[2rem]"></p>
+                    <div class="w-[35px] h-[2rem] flex items-center">
+                        <img id="flag" src="" width="105%">
+                    </div>
+                </div>
+
+                <div id="temdiv" class="relative mb-4 mt-2 ">
+                    <p id="temp" class="text-[2rem] font-bold"></p>
+                    <p id="feelslike" class="text-[12px] absolute left-3 bottom-[-8px] w-[100vw]">
+                    </p>
+                </div>
+
+                <div id="skydiv" class="m-2 relative">
+                    <p id="sky" class="text-xl"></p>
+                    <img id="skyimg" src="" alt="" class="absolute top-4" width="60px" height="60px">
+                </div>
+
+
+                <div id="others" class="py-2 grid grid-cols-2 gap-x-8 md:gap-x-4 gap-y-8 my-12 md:w-[80%]">
+
+                    <div id="wind"
+                        class="mx-auto w-full flex flex-col justify-evenly items-center min-w[150%] max-w-[180px] bg-[#dbe2ef80]  border-md p-4 rounded-[5px] hover:scale-105 hover:shadow-[0px_0px_7px_#00000077] transition-all duration-200">
+                        <img src="./assets/wind.png" alt="" width="50px">
+                        <p class="text-[1.15rem] font-semibold mt-1 mb-1">Wind Speed</p>
+                        <p id="windspeed"></p>
+                    </div>
+
+                    <div id="Humidity"
+                        class="mx-auto w-full flex flex-col justify-evenly items-center max-w-[180px] bg-[#dbe2ef80] border-md p-4 rounded-[5px] hover:scale-105 hover:shadow-[0px_0px_7px_#00000077] transition-all duration-200">
+                        <img src="./assets/humidity.png" alt="" width="50px">
+                        <p class="text-[1.15rem] font-semibold mt-1 mb-1">Humidity</p>
+                        <p id="humid"></p>
+                    </div>
+
+                    <div id="clouds"
+                        class="mx-auto w-full flex flex-col justify-evenly items-center max-w-[180px] bg-[#dbe2ef80] border-md p-4 rounded-[5px] hover:scale-105 hover:shadow-[0px_0px_7px_#00000077] transition-all duration-200">
+                        <img src="./assets/cloud.png" alt="" width="50px">
+                        <p class="text-[1.15rem] font-semibold mt-1 mb-1">Clouds</p>
+                        <p id="cloud"></p>
+                    </div>
+
+                    <div id="Visibility"
+                        class="mx-auto w-full flex flex-col justify-evenly items-center max-w-[180px] bg-[#dbe2ef80] border-md p-4 rounded-[5px] hover:scale-105 hover:shadow-[0px_0px_7px_#00000077] transition-all duration-200">
+                        <img src="./assets/Visibility.png" alt="" width="50px">
+                        <p class="text-[1.15rem] font-semibold mt-1 mb-1">Visibility</p>
+                        <p id="visibility"></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </section>
+
+    <footer class="fixed bg-black bottom-0 w-full">
+        <div
+            class="min-h-fit h-[30px] overflow-x-hidden w-full flex justify-between items-center text-[0.75rem] text-white">
+            <p class="md:ml-11 ml-4">&copy; Made by
+                <span class="opacity-[0.7] tracking-[1px] mx-[5px]">KL VITESH REDDY</span>
+            </p>
+
+            <p class="md:mr-14 mr-5 text-[0.85rem] cursor-pointer" id="contactbtn" onclick="getInTouch()">Get In Touch
+                <i class="fa-solid fa-caret-down"></i>
+            </p>
+        </div>
+
+        <div id="contactdiv"
+            class="scale-0 h-0 bg-black text-black text-[25px] flex justify-center items-center gap-x-7 md:gap-x-10 transition-all duration-[500ms]">
+            <a href="https://www.linkedin.com/in/vitesh-reddy-k-701676282" target="_blank"
+                class="bg-white rounded-full flex justify-center items-center px-[7.5px] py-[6px] hover:bg-[#0077B5] hover:text-white transition-all duration-[300ms]"><i
+                    class="fa-brands fa-linkedin-in"></i></a>
+
+            <a href="https://www.instagram.com/vitesh_reddy_/" target="_blank"
+                class="bg-white rounded-full flex justify-center items-center px-[7px] py-[6px] hover:bg-gradient-to-bl hover:from-purple-400 hover:via-pink-500 hover:to-yellow-500 hover:text-white transition-all duration-[300ms]"><i
+                    class="fa-brands fa-instagram"></i></a>
+
+            <a href="https://wa.me/+918099269269?text=Hii" target="_blank"
+                class="bg-white rounded-full flex justify-center items-center px-[7.5px] py-[6px] hover:bg-[#25D366] hover:text-white transition-all duration-[300ms]"><i
+                    class="fa-brands fa-whatsapp"></i></a>
+
+            <a href="https://x.com/KL_Vitesh_Reddy" target="_blank"
+                class="bg-white rounded-full flex justify-center items-center p-1.5 hover:bg-[#000] hover:text-white transition-all duration-[300ms]"><i
+                    class="fa-brands fa-x-twitter"></i></a>
+
+            <a href="https://mail.google.com/mail/u/0/?to=laxmiviteshreddy.k23@iiits.in&su=Feedback of Live Weather Web Application&tf=cm"
+                target="_blank"
+                class="bg-white rounded-full flex justify-center items-center p-1.5 hover:bg-[#D93025] hover:text-white transition-all duration-[300ms]"><i
+                    class="fa-regular fa-envelope"></i></a>
+
+        </div>
+    </footer>
+
+    <script src="./script.js"></script>
+</body>
+
+</html>
