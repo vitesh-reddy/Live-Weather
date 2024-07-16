@@ -1277,6 +1277,10 @@ video {
   padding-right: 10px;
 }
 
+.pr-\[25px\] {
+  padding-right: 25px;
+}
+
 .pb-1 {
   padding-bottom: 0.25rem;
 }
