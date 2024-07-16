@@ -33,7 +33,6 @@ let getInTouch = () => {
 };
 
 doc.addEventListener('click', function (event) {
-    console.log(event.target.id);
     if (event.target.id !== "search" && event.target.id !== "searchbar" && event.target.id !== "searchbtn")
         if (searchbar.value === "" && yourCityName === cityName) {
             search.classList.replace("bg-[#dbe2ef80]", "bg-transparent");
