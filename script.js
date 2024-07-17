@@ -21,6 +21,8 @@ addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
         doc.querySelector("#searchbar").blur();
         getSearchCity();
+        if (!contactdiv.classList.contains("h-0") && event.target.id != "contactbtn")
+            getInTouch();
     }
 });
 
@@ -29,19 +31,19 @@ let getInTouch = () => {
     contactdiv.classList.toggle("h-20");
     contactdiv.classList.toggle("h-0");
     contactdiv.classList.toggle("pb-[15px]");
-    window.scrollTo(0, document.body.scrollHeight);
 };
 
 doc.addEventListener('click', function (event) {
-    if (event.target.id !== "search" && event.target.id !== "searchbar" && event.target.id !== "searchbtn")
+    if (event.target.id !== "search" && event.target.id !== "searchbar" && event.target.id !== "searchbtn") {
         if (searchbar.value === "" && yourCityName === cityName) {
             search.classList.replace("bg-[#dbe2ef80]", "bg-transparent");
             searchbtn.classList.replace("scale-100", "scale-0");
             search.classList.replace("min-w-[140px]", "min-w-[120px]");
             search.classList.replace("pr-[25px]", "pr-[10px]");
-            if (!contactdiv.classList.contains("h-0") && event.target.id != "contactbtn")
-                getInTouch();
         }
+    }
+    if (!contactdiv.classList.contains("h-0") && event.target.id != "contactbtn")
+        getInTouch();
 });
 
 let changeTab = (Event) => {
