@@ -5,6 +5,7 @@ const error = doc.querySelector("#error");
 const errormsg = error.querySelector("#errormsg");
 const loading = doc.querySelector("#loading");
 const API_KEY = "d1845658f92b31c64bd94f06f7188c9c";
+const API_KEY2 = "668d312d38652220816457cjnb80033";
 const option = doc.querySelector("#options");
 const search = doc.querySelector("#search");
 const searchbtn = search.querySelector("#searchbtn");
@@ -149,13 +150,14 @@ let getCoordUsingGPS = async (location) => {
 // }
 
 let setYourCityName = async (latitude, longitude) => {
-    let responce = await fetch(
+    const cityAPIUrl =
         "https://geocode.maps.co/reverse?lat=" +
-            latitude +
-            "&lon=" +
-            longitude +
-            "&api_key=668d312d38652220816457cjnb80033"
-    );
+        latitude +
+        "&lon=" +
+        longitude +
+        "&api_key=" +
+        API_KEY2;
+    let responce = await fetch(cityAPIUrl);
     let data = await responce.json();
 
     cityName =
